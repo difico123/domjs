@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Quantity - Car - Model</th>
+        </tr>
+      </thead>
+
+      <tbody id="data-table"></tbody>
+    </table>
+    <script>
+      const xhr = new XMLHttpRequest();
+
+      let datas = [];
+
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            datas = JSON.parse(xhr.responseText);
+          }
+        }
+        if (xhr.status === 404) {
+          console.log("fail");
+        }
+      };
+      xhr.open("GET", "http://localhost:8080/", false);
+      xhr.send();
+
+      const loadData = () => {
+        const dataTable = document.getElementById("data-table");
+        let tableTxt = "";
+
+        for (let person = 0; person < datas.length; person++) {
+          let personName = "";
+          let personAge = "";
+          let carNames = `${datas[person].cars.length};  `;
+
+          personName = datas[person].name;
+          personAge = datas[person].age;
+          for (let car = 0; car < datas[person].cars.length; car++) {
+            let carName = "";
+
+            carName = `${datas[person].cars[car].name} - `;
+
+            for (
+              let model = 0;
+              model < datas[person].cars[car].models.length;
+              model++
+            ) {
+              let modelName = "";
+              modelName += `${datas[person].cars[car].models[model]}${
+                model === datas[person].cars[car].models.length - 1
+                  ? "; "
+                  : ", "
+              }`;
+              carName += modelName;
+            }
+            carNames += carName;
+          }
+          carNames = carNames.substring(0, carNames.length - 2);
+          tableTxt += `
+        <tr>
+          <th>${personName}</th>
+          <th>${personAge}</th>
+          <th>${carNames}</th>
+        </tr>`;
+        }
+        dataTable.innerHTML = tableTxt;
+        return tableTxt;
+      };
+
+      window.onload = () => {
+        loadData();
+      };
+    </script>
+  </body>
+</html>

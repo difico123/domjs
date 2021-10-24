@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <table id="data-table">
+      <thead>
+        <tr>
+          <th>
+            <input type="checkbox" name="select_all" />
+          </th>
+          <th onclick="sortColumn('name')" class="chaotic">Họ tên</th>
+          <th onclick="sortColumn('DOB')" class="chaotic">Ngày sinh</th>
+          <th onclick="sortColumn('sex')" class="chaotic">Giới tính</th>
+          <th onclick="sortColumn('score')" class="chaotic">Điểm</th>
+        </tr>
+      </thead>
+      <tbody id="body-table"></tbody>
+    </table>
+    <script>
+      let tableData = [
+        { name: "Hoàng Thị Thảo", DOB: 4, sex: "Nữ", score: 3 },
+        { name: "Ngô Mạnh Quân", DOB: 2, sex: "Nam", score: 5 },
+        { name: "Nguyễn Thanh Tùng", DOB: 3, sex: "Nam", score: 9 },
+        { name: "Hoàng Thị Ngân", DOB: 1, sex: "Nữ", score: 4 },
+      ];
+
+      const inputs = document.querySelectorAll(
+        'table tr td input[type="checkbox"]'
+      );
+      const checkboxAll = document.getElementsByName("select_all")[0];
+
+      function loadTableData() {
+        const tableBody = document.getElementById("body-table");
+
+        let dataHtml = "";
+        for (let person of tableData) {
+          dataHtml += `<tr>
+          <td><input type='checkbox' onclick="tick(this)" /></td>
+          <td >${person.name}</td>
+          <td>${person.DOB}</td>
+          <td>${person.sex}</td>
+          <td>${person.score}</td>
+          </tr>`;
+        }
+
+        tableBody.innerHTML = dataHtml;
+        checkboxAll.addEventListener("click", selectAll, false);
+        const clickRow = document.querySelectorAll("table tr");
+        const checkboxAllBtn = document.querySelector('input[type="checkbox"]');
+        const inputs = document.querySelectorAll(
+          'table tbody tr td input[type="checkbox"]'
+        );
+        function selectAll() {
+          if (this.checked) {
+            for (let i = 0; i < inputs.length; i++) {
+              inputs[i].checked = true;
+              inputs[i].parentElement.parentElement.style.background =
+                "#f9ca24";
+            }
+          } else {
+            for (let i = 0; i < inputs.length; i++) {
+              inputs[i].checked = false;
+              inputs[i].parentElement.parentElement.style.background =
+                inputs[i].style.color;
+            }
+          }
+        }
+
+        for (let i = 1; i < clickRow.length; i++) {
+          clickRow[i].addEventListener("click", OnChangeCheckbox, false);
+        }
+
+        function OnChangeCheckbox(event) {
+          this.firstElementChild.firstElementChild.checked =
+            !this.firstElementChild.firstElementChild.checked;
+          if (!this.firstElementChild.firstElementChild.checked) {
+            this.style.background = this.style.color;
+          } else {
+            this.style.background = "#f9ca24";
+          }
+
+          let count = 0;
+          for (let i = 0; i < inputs.length; i++) {
+            if (inputs[i].checked) {
+              count = count + 1;
+            } else {
+              break;
+            }
+          }
+
+          if (count === inputs.length) {
+            checkboxAllBtn.checked = true;
+          } else {
+            checkboxAllBtn.checked = false;
+          }
+        }
+      }
+
+      window.onload = () => {
+        loadTableData();
+      };
+
+      // 0 asc 1 desc 2 default
+      let sortType = {};
+      for (let i = 0; i < Object.keys(tableData[0]).length; i++) {
+        let key = Object.keys(tableData[0])[i];
+        sortType[key] = 2;
+      }
+
+      const sortColumnIcon = document.querySelectorAll("thead tr th.chaotic");
+
+      const iconForSort = (event) => {
+        checkboxAll.checked = false;
+        let flag = false;
+        for (let i = 0; i < sortColumnIcon.length; i++) {
+          let key = Object.keys(tableData[0])[i];
+
+          if (sortType[key] === 0) {
+            sortColumnIcon[i].classList.add("descrease");
+            sortColumnIcon[i].classList.remove("increase");
+          } else if (sortType[key] === 1) {
+            sortColumnIcon[i].classList.add("increase");
+            sortColumnIcon[i].classList.remove("chaotic");
+          } else {
+            sortColumnIcon[i].classList.add("chaotic");
+          }
+        }
+      };
+
+      for (let i = 0; i < sortColumnIcon.length; i++) {
+        sortColumnIcon[i].addEventListener("click", iconForSort, false);
+      }
+      function sortColumn(columnName) {
+        const dataType = typeof tableData[0][columnName];
+        for (let type in sortType) {
+          if (type === columnName) {
+            sortType[columnName] = (sortType[columnName] + 1) % 2;
+          } else {
+            sortType[type] = 2;
+          }
+        }
+
+        switch (dataType) {
+          case "number":
+            sortNumberColumn(sortType[columnName], columnName);
+            break;
+          case "string":
+            sortStringColumn(sortType[columnName], columnName);
+            break;
+        }
+        loadTableData(tableData);
+      }
+
+      function sortNumberColumn(sort, columnName) {
+        tableData = tableData.sort((p1, p2) => {
+          return sort === 1
+            ? p1[columnName] - p2[columnName]
+            : p2[columnName] - p1[columnName];
+        });
+      }
+      function sortStringColumn(sort, columnName) {
+        tableData = tableData.sort((p1, p2) => {
+          if (p1[columnName].toLowerCase() < p2[columnName].toLowerCase()) {
+            return sort === 1 ? -1 : 1;
+          } else if (
+            p1[columnName].toLowerCase() > p2[columnName].toLowerCase()
+          ) {
+            return sort === 1 ? 1 : -1;
+          }
+          return 0;
+        });
+      }
+
+      const checkAll = (i) => {
+        if (i.checked) {
+          for (let i = 0; i < inputs.length; i++) {
+            inputs[i].checked = true;
+            inputs[i].parentElement.parentElement.style.background = "#f9ca24";
+          }
+        } else {
+          for (let i = 0; i < inputs.length; i++) {
+            inputs[i].checked = false;
+            inputs[i].parentElement.parentElement.style.background =
+              inputs[i].style.color;
+          }
+        }
+      };
+
+      let tick = (i) => {
+        i.checked = !i.checked;
+        i.parentElement.parentElement.style.background = i.checked
+          ? "#f9ca24"
+          : i.style.color;
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,51 @@
+@import url("https://use.fontawesome.com/releases/v5.13.0/css/all.css");
+table,
+th,
+td {
+  border: 1px solid black;
+}
+td {
+  padding: 0 20px;
+  text-align: center;
+}
+
+tr:nth-child(odd) {
+  background: #758283;
+}
+
+tr:hover {
+  background: greenyellow;
+  cursor: pointer;
+}
+thead tr:first-child {
+  /* pointer-events: none; */
+  background: #03c6c7;
+}
+tr:focus {
+  background: #e8bd0d;
+}
+
+.descrease::after {
+  font-family: "Font Awesome 5 Free";
+  content: "\f063";
+  display: inline-block;
+  padding-left: 3px;
+  vertical-align: middle;
+  font-weight: 900;
+}
+.increase::after {
+  font-family: "Font Awesome 5 Free";
+  content: "\f062";
+  display: inline-block;
+  padding-left: 3px;
+  vertical-align: middle;
+  font-weight: 900;
+}
+.chaotic::after {
+  font-family: "Font Awesome 5 Free";
+  content: "\f338";
+  display: inline-block;
+  padding-left: 3px;
+  vertical-align: middle;
+  font-weight: 900;
+}

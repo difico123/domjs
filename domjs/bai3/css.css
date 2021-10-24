@@ -1,0 +1,106 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  height: 300px;
+  border: 1px solid black;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  font-family: "Roboto", sans-serif;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.num {
+  border: 1px solid #758283;
+  background-color: white;
+  font-size: 32px;
+}
+.query {
+  border: 1px solid black;
+  background-color: cornsilk;
+  font-size: 32px;
+}
+.N7 {
+  grid-area: 3/1/4/2;
+}
+.N8 {
+  grid-area: 3/2/4/3;
+}
+.N9 {
+  grid-area: 3/3/4/4;
+}
+.N6 {
+  grid-area: 4/3/5/4;
+}
+.N5 {
+  grid-area: 4/2/5/3;
+}
+.N4 {
+  grid-area: 4/1/5/2;
+}
+.N3 {
+  grid-area: 5/3/6/4;
+}
+.N2 {
+  grid-area: 5/2/6/3;
+}
+.N1 {
+  grid-area: 5/1/6/2;
+}
+.N0 {
+  grid-area: 6/1/7/4;
+}
+
+.del {
+  grid-area: 7/1/8/2;
+}
+.equal {
+  grid-area: 7/4/8/5;
+}
+.delAll {
+  grid-area: 7/3/8/4;
+}
+.lunisolar {
+  grid-area: 7/2/8/3;
+}
+.add {
+  grid-area: 6/4/7/5;
+}
+.sub {
+  grid-area: 5/4/6/5;
+}
+
+.mul {
+  grid-area: 4/4/5/5;
+}
+.divi {
+  grid-area: 3/4/4/5;
+}
+.dis {
+  grid-area: 1/1/3/5;
+  background-color: black;
+  color: white;
+  font-size: 50px;
+  height: 90%;
+  overflow: hidden;
+  text-align: end;
+}
+.dis p {
+  position: relative;
+  bottom: 30px;
+  right: 0;
+}
+@media only screen and (max-width: 600px) {
+  .container {
+    width: 85%;
+  }
+}
+@media only screen and (min-width: 600px) {
+  .container {
+    width: 500px;
+  }
+}

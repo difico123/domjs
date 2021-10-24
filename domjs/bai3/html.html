@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css.css" />
+  </head>
+  <body>
+    <div class="container">
+      <button class="N7 num" onclick="numberDisplay(7)">7</button>
+      <button class="N8 num" onclick="numberDisplay(8)">8</button>
+      <button class="N9 num" onclick="numberDisplay(9)">9</button>
+      <button class="N4 num" onclick="numberDisplay(4)">4</button>
+      <button class="N5 num" onclick="numberDisplay(5)">5</button>
+      <button class="N6 num" onclick="numberDisplay(6)">6</button>
+      <button class="N1 num" onclick="numberDisplay(1)">1</button>
+      <button class="N2 num" onclick="numberDisplay(2)">2</button>
+      <button class="N3 num" onclick="numberDisplay(3)">3</button>
+      <button class="N0 num" onclick="numberDisplay(0)">0</button>
+      <button class="add query" onclick="operatorDisplay('+')">+</button>
+      <button class="sub query" onclick="operatorDisplay('-')">-</button>
+      <button class="divi query" onclick="operatorDisplay('/')">/</button>
+      <button class="mul query" onclick="operatorDisplay('x')">x</button>
+      <button class="equal query" onclick="equalDisplay()">=</button>
+      <button class="delAll query" onclick="deleteAllDisplay()">CE</button>
+      <button class="lunisolar query" onclick="lunisolarDisplay()">+/-</button>
+      <button class="del query" onclick="deleteDisplay()">C</button>
+      <div class="dis"><p class="result"></p></div>
+    </div>
+
+    <script>
+      let del = document.getElementsByClassName("del");
+      let dis = document.getElementsByClassName("result");
+      let equal = document.getElementsByClassName("equal");
+
+      let str = "";
+
+      let currOperator = "";
+      let flag = false;
+
+      const operatorReg = new RegExp("[x/+-]");
+
+      function parseOperator(num1, num2, operatorStr) {
+        switch (operatorStr) {
+          case "-":
+            return num1 - num2;
+          case "+":
+            return num1 + num2;
+          case "/":
+            return num1 / num2;
+          case "x":
+            return num1 * num2;
+        }
+      }
+
+      function numberDisplay(num) {
+        let arr = str.split(` ${currOperator} `);
+        if (
+          (str === "" && num === 0) ||
+          (arr.length === 2 && str[str.length - 1] === " " && num === 0) ||
+          str.length > 15
+        ) {
+          return false;
+        }
+
+        if (flag) {
+          str = "";
+          flag = false;
+        }
+        str = str + num.toString();
+        dis[0].innerHTML = `${str}`;
+      }
+      function deleteDisplay() {
+        str = str[str.length - 2] === "+" ? str.slice(0, -3) : str.slice(0, -1);
+        dis[0].innerHTML = `${str}`;
+      }
+      function deleteAllDisplay() {
+        str = "";
+        dis[0].innerHTML = `${str}`;
+      }
+
+      function operatorDisplay(operatorStr) {
+        if (str === "") {
+          return false;
+        }
+        if (flag) {
+          flag = false;
+        }
+        let arr = str.split(` ${currOperator} `);
+
+        if (arr.length === 1) {
+          str = str + " " + operatorStr + " ";
+        } else {
+          let arr = str.split(` ${currOperator} `);
+          if (!arr[1]) {
+            return false;
+          }
+
+          let total = parseOperator(
+            parseFloat(arr[0]),
+            parseFloat(arr[1]),
+            currOperator
+          );
+          str = total.toString() + ` ${operatorStr} `;
+        }
+        dis[0].innerHTML = `${str}`;
+        currOperator = operatorStr;
+      }
+
+      function equalDisplay() {
+        let arr = str.split(` ${currOperator} `);
+        if (!arr[1]) {
+          return false;
+        }
+        flag = true;
+        let total = parseOperator(
+          parseFloat(arr[0]),
+          parseFloat(arr[1]),
+          currOperator
+        );
+
+        str = total.toString();
+        dis[0].innerHTML = `${str}`;
+      }
+
+      function lunisolarDisplay() {
+        if (str === "") {
+          return false;
+        }
+        let arr = str.split(` ${currOperator} `);
+
+        if (!arr[1]) {
+          let total = 0 - parseInt(str);
+          str = total.toString();
+          dis[0].innerHTML = `${str}`;
+        }
+      }
+    </script>
+  </body>
+</html>
